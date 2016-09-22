@@ -1,0 +1,73 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Import Users{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Import Users</h1>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/um/users/import/create">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Oh snap!</strong> {{ error }}
+                    </div>
+                {% endif %}
+                <div class="col-lg-12">
+                    <input type="hidden" name="total-new-users" value="{{ newUsers|length }}" />
+                    <label><input type="checkbox" name="chk-all" id="chk-all"> Check All</label>
+                    <table id="users" class="table-striped table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>No.</th>
+                                <th>Acquire ID</th>
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Email Address</th>
+                                <th>Department</th>
+                                <th>Unit</th>
+                                <th>Hire Date</th>
+                                <th>Designation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for newUser in newUsers %}
+                                <tr>
+                                    <td><input type="checkbox" name="chk-{{ loop.index }}"></td>
+                                    <td>{{ loop.index }}</td>
+                                    <td><input type="hidden" name="acquire-id-{{ loop.index }}" value="{{ newUser.acquire_id|e }}"/>{{ newUser.acquire_id|e }}</td>
+                                    <td><input type="hidden" name="last-name-{{ loop.index }}" value="{{ newUser.last_name|e }}"/>{{ newUser.last_name|e }}</td>
+                                    <td><input type="hidden" name="first-name-{{ loop.index }}" value="{{ newUser.first_name|e }}"/>{{ newUser.first_name|e }}</td>
+                                    <td><input type="hidden" name="middle-name-{{ loop.index }}" value="{{ newUser.middle_name|e }}"/>{{ newUser.middle_name|e }}</td>
+                                    <td><input type="hidden" name="email-address-{{ loop.index }}" value="{{ newUser.email_address|e }}"/>{{ newUser.email_address|e }}</td>
+                                    <td><input type="hidden" name="department-{{ loop.index }}" value="{{ newUser.department|e }}"/>{{ newUser.department|e }}</td>
+                                    <td><input type="hidden" name="unit-{{ loop.index }}" value="{{ newUser.unit|e }}"/>{{ newUser.unit|e }}</td>
+                                    <td><input type="hidden" name="hire-date-{{ loop.index }}" value="{% if (newUser.hire_date == 'blank') %}-{% else %}{{ newUser.hire_date|date("m-d-y") }}{% endif %}"/>{% if (newUser.hire_date == 'blank') %}-{% else %}{{ newUser.hire_date|date("m/d/y") }}{% endif %}</td>
+                                    <td><input type="hidden" name="designation-{{ loop.index }}" value="{{ newUser.designation|e }}"/>{{ newUser.designation|e }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {% raw %}
+        <script>
+            $(document).ready(function() {
+                $("#chk-all").click(function () {
+                    $('input:checkbox').not(this).prop('checked', this.checked);
+                });
+            });
+        </script>
+    {% endraw %}
+{% endblock %}

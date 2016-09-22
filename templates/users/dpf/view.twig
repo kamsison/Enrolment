@@ -1,0 +1,95 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Create DPF{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Create DPF</h1>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/um/dpf/create">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Oh snap!</strong> {{ error }}
+                    </div>
+                {% endif %}
+                <div class="col-lg-12">
+                    <input type="hidden" name="total-new-users" value="{{ users|length }}" />
+                    <label><input type="checkbox" name="chk-all" id="chk-all"> Check All</label>
+                    <table id="users" class="table-striped table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>No.</th>
+                                <th>Acquire ID</th>
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Unit</th>
+                                <th>DPF Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <td><input type="checkbox" name="chk-{{ loop.index }}"></td>
+                                    <td>{{ loop.index }}
+                                        {% set line = loop.index %}</td>
+                                    <td><input type="hidden" name="user-id-{{ loop.index }}" value="{{ user.id|e }}"/>{{ user.acquire_id|e }}</td>
+                                    <td>{{ user.last_name|e }}</td>
+                                    <td>{{ user.first_name|e }}</td>
+                                    <td>{{ user.middle_name|e }}</td>
+                                    <td>{{ user.designation|e }}</td>
+                                    <td>{{ user.department|e }}</td>
+                                    <td>{{ user.unit|e }}</td>
+                                    <td><input type="hidden" name="count-{{ loop.index }}" value="{{ user.getDpfCount()|e }}"/>{{ user.getDpfCount() }}</td>
+                                </tr>
+                                {% for file in user.getFiles() %}
+                                    <tr>
+                                        <td colspan="2" style="width:5%;"><small>
+                                                {% if (file.image_path) %}
+                                                    <a href="{{ file.image_path }}/{{ file.image_name }}" rel="prettyPhoto" title="{{ file.image_name }}">
+                                                        <img src="{{ file.image_path }}/{{ file.image_name }}" class="img-thumbnail" alt="{{ file.image_name }}" />
+                                                    </a>
+                                                {% endif %}
+                                            </small>
+                                        </td>
+                                        <td><input type="hidden" name="total-files-{{ line }}" value="{{ user.getFiles()|length }}"/>
+                                            <input type="hidden" name="file-id-{{ line }}-{{ loop.index }}" value="{{ file.id|e }}"/><small><b>Batch ID</b><br/>{{ file.batch_id }}</small></td>
+                                        <td colspan="4"><small>{{ file.path|e }}</small></td>
+                                        <td><small><b>Created</b><br/>{{ file.created|date("m/d/y H:i") }}</small></td>
+                                        <td><small><b>Matches</b><br/>{{ file.match_count|e }}</small></td>
+                                        <td class="ex-css"><small><b>Samples</b><br/>{% if file.samples is not empty %}<a href="javascript:void(0);" class="link-details fa fa-info-circle" rel="tooltip" title="Samples: {{ file.samples }}"></a>{% endif %} <i>hover</i></small></td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {% raw %}
+        <script>
+            $(document).ready(function() {
+                $("#chk-all").click(function () {
+                    $('input:checkbox').not(this).prop('checked', this.checked);
+                });
+
+                $("a[rel^='prettyPhoto']").prettyPhoto({
+                    theme:'light_square',
+                    social_tools: false
+                });
+            });
+        </script>
+    {% endraw %}
+{% endblock %}

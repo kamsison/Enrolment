@@ -1,0 +1,92 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Import Files{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Import Files</h1>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/um/files/import/create">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Oh snap!</strong> {{ error }}
+                    </div>
+                {% endif %}
+                <div class="col-lg-12">
+                    <input type="hidden" name="total-new-files" value="{{ newFiles|length }}" />
+                    <label><input type="checkbox" name="chk-all" id="chk-all"> Check All</label>
+                    <table id="files" class="table-striped table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>No.</th>
+                                <th>Batch Id</th>
+                                <th style="width:25%;">Path</th>
+                                <th>Match</th>
+                                <th>Created</th>
+                                <th>Modified</th>
+                                <th>Owner</th>
+                                <th>Table</th>
+                                <th>Samples</th>
+                                <th style="width:20%;">Cards</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for newFile in newFiles %}
+                            <tr>
+                                <td>{% if newFile.exist == false %}<input type="checkbox" name="chk-{{ loop.index }}">{% endif %}</td>
+                                <td>{{ loop.index }}</td>
+                                {% set line = loop.index %}
+                                <td>
+                                    {% if newFile.isBegin == 1 %}
+                                        <input type="hidden" name="is-beginning-{{ loop.index }}" value="1" />
+                                    {% endif %}
+                                    <input type="hidden" name="batch-id-{{ loop.index }}" value="{{ newFile.batch_id|e }}"/>{{ newFile.batch_id|e }}</td>
+                                <td style="width:25%;"><input type="hidden" name="path-{{ loop.index }}" value="{{ newFile.path|e }}"/>{{ newFile.path|e }}</td>
+                                <td><input type="hidden" name="match-{{ loop.index }}" value="{{ newFile.match|e }}"/>{{ newFile.match|e }}</td>
+                                <td><input type="hidden" name="created-{{ loop.index }}" value="{{ newFile.created|e }}"/>{{ newFile.created|date("m/d/y H:i") }}</td>
+                                <td><input type="hidden" name="modified-{{ loop.index }}" value="{{ newFile.modified|e }}"/>{{ newFile.modified|date("m/d/y H:i") }}</td>
+                                <td><input type="hidden" name="owner-{{ loop.index }}" value="{{ newFile.owner|e }}"/>{{ newFile.owner|e }}</td>
+                                <td class="ex-css"><input type="hidden" name="table-{{ loop.index }}" value="{{ newFile.table|e }}"/>{% if newFile.table is not empty %}<a href="javascript:void(0);" class="link-details fa fa-info-circle" rel="tooltip" title="Table: {{ newFile.table }}"></a>{% endif %}</td>
+                                <td class="ex-css"><input type="hidden" name="samples-{{ loop.index }}" value="{{ newFile.samples|e }}"/>{% if newFile.samples is not empty %}<a href="javascript:void(0);" class="link-details fa fa-info-circle" rel="tooltip" title="Samples: {{ newFile.samples }}"></a>{% endif %}</td>
+                                <td style="width:20%;">
+                                    {% if newFile.cards is not empty %}
+                                        <input type="hidden" name="total-cards-{{ line }}" value="{{ newFile.cards|length }}"/>
+                                        {% for card in newFile.cards %}
+                                            <input type="hidden" name="card-value-{{ line }}-{{ loop.index }}" value="{{ card.value|e }}"/>
+                                            <input type="hidden" name="card-count-{{ line }}-{{ loop.index }}" value="{{ card.count|e }}"/>
+                                            <span class="label label-primary" style="white-space: pre-line;">{{ card.value }} <span class="badge btn-info" style="background-color: #5bc0de !important">x{{ card.count }}</span></span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <input type="hidden" name="status-{{ loop.index }}" value="{{ newFile.status|e }}"/>
+                                    {% if (newFile.statusStr) %}{{ newFile.statusStr|raw }}{% else %}{% if newFile.status == 1 %}<span class="label label-warning" style="white-space: pre-line;">Duplicate</span>{% else %}<span class="label label-success" style="white-space: pre-line;">Suspected</span>{% endif %}{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {% raw %}
+    <script>
+        $(document).ready(function() {
+            $("#chk-all").click(function () {
+                $('input:checkbox').not(this).prop('checked', this.checked);
+            });
+        });
+    </script>
+    {% endraw %}
+{% endblock %}

@@ -1,0 +1,115 @@
+<div class="container">
+    <div class="navbar-header">
+       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/um/index.php">
+            <img src="/um/assets/images/logo.png" class="logo">
+            <div class="logo-bottom-curve"></div>
+        </a>
+    </div>
+</div>
+<ul class="nav navbar-top-links navbar-right">
+    <!-- Notifications -->
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="fa fa-bell fa-fw"></i>
+                Notifications
+            <i class="fa fa-caret-down"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-alerts">
+            <!-- admin and above tasks-->
+            {% if loggedInUser.type >= 2 %}
+                <li>
+                    <a href="/um/files/status/2">
+                        <div>
+                            <i class="fa fa-exclamation-circle"></i> <span class="badge">{{ suspectedFileTotal.count() }}</span> New Suspected Files
+                            <span class="pull-right text-muted small">{% if suspectedFileTotal.count() > 0 %}Last {{ suspectedFileTotal.0.created_at }}{% endif %}</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="/um/files/status/4">
+                        <div>
+                            <i class="fa fa-warning fa-fw"></i> <span class="badge">{{ positiveFileTotal.count() }}</span> New Positive Files
+                            <span class="pull-right text-muted small">{% if positiveFileTotal.count() > 0 %}Last {{ positiveFileTotal.0.created_at }}{% endif %}</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="/um/files/status/3">
+                        <div>
+                            <i class="glyphicon glyphicon-hourglass"></i> <span class="badge">{{ wipFileTotal.count() }}</span> Work in Progress
+                            <span class="pull-right text-muted small">{% if wipFileTotal.count() > 0 %}Last {{ wipFileTotal.0.created_at }}{% endif %}</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="divider"></li>
+            {% endif %}
+
+            <!-- All users tasks-->
+            <li>
+                <a href="/um/dpf/status/all">
+                    <div>
+                        <i class="fa fa-legal fa-fw"></i> <span class="badge">{{ dpfTodoTotal.count() }}</span> New DPF To-Dos
+                        <span class="pull-right text-muted small">{% if dpfTodoTotal.count() > 0 %}{{ dpf_created_at }} minutes ago{% endif %}</span>
+                    </div>
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a href="/um/caf/status/all">
+                    <div>
+                        <i class="fa fa-edit fa-fw"></i> <span class="badge">{{ cafTodoTotal.count() }}</span> New CAF To-Dos
+                        <span class="pull-right text-muted small">{% if cafTodoTotal.count() > 0 %}{{ caf_created_at }} minutes ago{% endif %}</span>
+                    </div>
+                </a>
+            </li>
+            <li class="divider"></li>
+
+            <!-- HR and above tasks-->
+            {% if loggedInUser.type >= 2 %}
+                <li>
+                    <a href="/um/caf/status/5">
+                        <div>
+                            <i class="fa fa-edit fa-fw"></i> <span class="badge">{{ cafMarkSecurelyDeletedTotal.count() }}</span> New Mark Securely Deleted
+                            <span class="pull-right text-muted small">{% if cafMarkSecurelyDeletedTotal.count() > 0 %}{{ created_at }} minutes ago{% endif %}</span>
+                        </div>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </li>
+    <!-- Profile -->
+    <li class="dropdown">
+        {% if loggedInUser %}
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-user fa-fw"></i>
+                    {% if loggedInUser.type == 4 %}
+                        Hi Admin!
+                    {% else %}
+                        Hi {{ loggedInUser.first_name }}
+                    {% endif %}
+                <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li>
+                    <a href="/um/users/{{ loggedInUser.id }}"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="/um/users/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                </li>
+            </ul>
+        {% else %}
+            <li>
+                <a href="/um/users/login"><i class="fa fa-user fa-fw"></i> Login</a>
+            </li>
+        {% endif %}
+    </li>
+</ul>

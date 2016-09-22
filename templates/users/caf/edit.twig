@@ -1,0 +1,391 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Respond CAF{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Respond CAF</h1>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form form-horizontal" role="form" method="post" action="/um/caf/edit">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Oh snap!</strong> {{ error }}
+                    </div>
+                {% endif %}
+                <div class="col-lg-12">
+                    <input type="hidden" name="id" {% if caf %}value="{{ caf.id }}"{% endif %} />
+                    <div class="col-lg-12">
+                        <div class="col-lg-6">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label class="control-label">Acquire ID</label>
+                                    <h3><span class="label label-primary">{% if user.acquire_id %}{{ user.acquire_id }}{% else %}None{% endif %}</span></h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="form-group">
+                                    <label class="control-label">Last Name, First Name Middle Name</label>
+                                    <h3><span class="label label-primary">{% if user %}{{ user.last_name }}, {{ user.first_name }} {{ user.middle_name }}{% endif %}</span></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Designation</label>
+                                        <h3><span class="label label-primary">{% if user %}{{ user.designation }}{% endif %}</span></h3>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Department</label>
+                                        <h3><span class="label label-primary">{% if user %}{{ user.department }}{% endif %}</span></h3>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Unit</label>
+                                        <h3><span class="label label-primary">{% if user %}{{ user.unit }}{% endif %}</span></h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <hr>
+                    </div>
+                    <div class="col-lg-12">
+                        <table id="users" class="table-striped table">
+                            <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Batch Id</th>
+                                <th>Path</th>
+                                <th>Created</th>
+                                <th>Matches</th>
+                                <th>Samples</th>
+                                <th style="width:5%;">Image</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for file in user.getActiveFiles(user.id, caf.dpf_id) %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td><small>{{ file.batch_id }}</small></td>
+                                    <td><small>{{ file.path|e }}</small></td>
+                                    <td><small>{{ file.created|date("m/d/y H:i") }}</small></td>
+                                    <td><small>{{ file.match_count|e }}</small></td>
+                                    <td class="ex-css"><small>{% if file.samples is not empty %}<a href="javascript:void(0);" class="link-details fa fa-info-circle" rel="tooltip" title="Samples: {{ file.samples }}"></a>{% endif %} <i>hover</i></small></td>
+                                    <td style="width:5%;"><small>
+                                            {% if (file.image_path) %}
+                                                <a href="{{ file.image_path }}/{{ file.image_name }}" rel="prettyPhoto" title="{{ file.image_name }}">
+                                                    <img src="{{ file.image_path }}/{{ file.image_name }}" class="img-thumbnail" alt="{{ file.image_name }}" />
+                                                </a>
+                                            {% endif %}
+                                        </small>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-12">
+                        <hr>
+                    </div>
+                    <div class="col-lg-12">
+                        <h4>Violation of the Company's Code of Conduct Rule V Par. 20: Failure to Comply with Acquire BPO Policies and Provisions;
+                            Acquire Card Holder Data Security Policy 5.2 Card Holder Data Handling</h4>
+                        <p style="text-align:justify">
+                            This is to inform you of Management's Decision regarding your current Administrative Case. A Due Process Form (DPF) was given to you on {{ caf.getDpf().getShortCreatedAt() }} directing you to explain in writing your position relating to alleged violation of the Company's Credit Card Handling and Information Records Policy.  Specifically, our records show that you stored Customer Credit Card Information in your computer.
+                        </p>
+                        <p style="text-align:justify">
+                            A total of <u><b>{{ caf.getDpf().count }}</b></u> Credit Card Number/s were found either in your computer's local hard drive or network shared folder/s.
+                        </p>
+                        <p style="text-align:justify">
+                            Your explanation: {{ caf.employee_notes }}
+                        </p>
+                        <p style="text-align:justify">
+                            The security of a customer's credit card information and identity must be protected at all times. Negligently or deliberately storing
+                            such information is therefore strictly prohibited.
+                        </p>
+                        <p style="text-align:justify">
+                            After giving due consideration to your explanation and the presented evidence of your infraction, the Company is hereby issuing you
+                            a {% if (caf.cause != 0) %}{{ caf.getStatus()[caf.status] }}{% else %}undefined{% endif %} for {{ caf.getCause()[caf.cause] }}. You are further cautioned to be mindful of your tasks and responsibilities, additional infractions shall warrant corrective action that may lead up to Termination of Employment.
+                        </p>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <hr>
+                    </div>
+                    {% if loggedInUser.type == 1 %}
+                        {% if caf.action_status > 2  %}
+                            {% set isDisabled = 'disabled' %}
+                        {% endif %}
+                        <div class="col-lg-12">
+                            <h4>Employee's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="action-status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="action-status" id="action-status" value="2" checked {{ isDisabled }}>Response
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-notes">Notes</label>
+                                    <textarea class="form-control" name="employee-notes" id="employee-notes" rows="3" placeholder="Write notes" required {{ isDisabled }}>{{ caf.employee_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    {% elseif loggedInUser.type == 3 %}
+                        {% if caf.action_status != 2  %}
+                            {% set isDisabled = 'disabled' %}
+                        {% endif %}
+                        <div class="col-lg-12">
+                            <h4>Employee's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="employee-status" id="employee-status" value="2" disabled checked>Responded
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-notes">Notes</label>
+                                    <textarea class="form-control" name="employee-notes" id="employee-notes" rows="3" placeholder="Write notes" disabled>{{ caf.employee_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <hr>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4>HR's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="action-status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="action-status" id="action-status" value="4" checked {{ isDisabled }}>For Secure Deletion
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="cause">Cause For Action</label>
+                                    <h3>
+                                        <select id="cause" name="cause" class="form-control" {{ isDisabled }}>
+                                            <option value="1" {% if caf.cause == 1 %}selected{% endif %}>Negligence of Duty</option>
+                                            <option value="2" {% if caf.cause == 2 %}selected{% endif %}>Misconduct</option>
+                                            <option value="3" {% if caf.cause == 3 %}selected{% endif %}>Fraud</option>
+                                        </select>
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="hr-notes">Notes</label>
+                                    <textarea class="form-control" name="hr-notes" id="hr-notes" rows="3" placeholder="Write notes" required {{ isDisabled }}>{{ caf.hr_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    {% elseif loggedInUser.type == 4 %}
+                        {% if caf.action_status != 4  %}
+                            {% set isDisabled = 'disabled' %}
+                        {% endif %}
+                        <div class="col-lg-12">
+                            <h4>Employee's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="employee-status" id="employee-status" value="2" disabled checked>Responded
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-notes">Notes</label>
+                                    <textarea class="form-control" name="employee-notes" id="employee-notes" rows="3" placeholder="Write notes" disabled>{{ caf.employee_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <hr>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4>HR's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="hr-status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="hr-status" id="hr-status" value="4" disabled checked>For Secure Deletion
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="cause">Cause For Action</label>
+                                    <h3>
+                                        <select id="cause" name="cause" class="form-control" disabled>
+                                            <option value="1" {% if caf.cause == 1 %}selected{% endif %}>Negligence of Duty</option>
+                                            <option value="2" {% if caf.cause == 2 %}selected{% endif %}>Misconduct</option>
+                                            <option value="3" {% if caf.cause == 3 %}selected{% endif %}>Fraud</option>
+                                        </select>
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="admin-notes">Notes</label>
+                                    <textarea class="form-control" name="hr-notes" id="hr-notes" rows="3" placeholder="Write notes" disabled>{{ caf.hr_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <hr>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4>Super Admin's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="action-status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="action-status" id="action-status" value="5" checked {{ isDisabled }}>Approve (For Secure Deletion)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="admin-notes">Notes</label>
+                                    <textarea class="form-control" name="admin-notes" id="admin-notes" rows="3" placeholder="Write notes" required {{ isDisabled }}>{{ caf.admin_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    {% elseif loggedInUser.type == 2 %}
+                        {% if caf.action_status != 5 and caf.action_status != 6  %}
+                            {% set isDisabled = 'disabled' %}
+                        {% endif %}
+                        <div class="col-lg-12">
+                            <h4>Employee's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="employee-status" id="employee-status" value="2" disabled checked>Responded
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-notes">Notes</label>
+                                    <textarea class="form-control" name="employee-notes" id="employee-notes" rows="3" placeholder="Write notes" disabled>{{ caf.employee_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <hr>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4>HR's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="hr-status" id="hr-status" value="4" disabled checked>For Secure Deletion
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-notes">Notes</label>
+                                    <textarea class="form-control" name="hr-notes" id="hr-notes" rows="3" placeholder="Write notes" disabled>{{ caf.hr_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <hr>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4>Admin's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="action-status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="action-status" id="action-status" value="6" {% if caf.action_status == 6 %}checked{% endif %} {{ isDisabled }}>Mark As Securely Deleted
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="action-status" id="action-status" value="5" {% if caf.action_status == 5 %}checked{% endif %} {{ isDisabled }}>Not Yet Securely Deleted
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <hr>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="copy" id="copy" value="7" {% if caf.copy == 1 %}checked{% endif %} {{ isDisabled }}>Copy To Thumb Drive
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="destruct" id="destruct" value="8" {% if caf.destruct == 1 %}checked{% endif %} {{ isDisabled }}>Destruct File
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="it-notes">Notes</label>
+                                    <textarea class="form-control" name="it-notes" id="it-notes" rows="3" placeholder="Write notes" required {{ isDisabled }}>{{ caf.it_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-12">
+                        <hr>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {% raw %}
+        <script>
+            $(document).ready(function() {
+                $("a[rel^='prettyPhoto']").prettyPhoto({
+                    theme:'light_square',
+                    social_tools: false
+                });
+            });
+        </script>
+    {% endraw %}
+{% endblock %}

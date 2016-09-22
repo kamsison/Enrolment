@@ -1,0 +1,91 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Investigate Files{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Investigate Files</h1>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form form-horizontal" role="form" method="post" action="/um/users/investigate/edit">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Oh snap!</strong> {{ error }}
+                    </div>
+                {% endif %}
+                <div class="col-lg-12">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Path</label>
+                                        <h3><span class="label label-primary wrap">{% if file %}{{ file.path }}{% endif %}</span></h3>
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+                                    <div class="form-group">
+                                        <label class="control-label">Batch Id</label>
+                                        <h3><span class="label label-primary wrap">{% if file %}{{ file.batch_id }}{% endif %}</span></h3>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Match</label>
+                                            <h3><span class="label label-primary">{% if file %}{{ file.match_count }}{% endif %}</span></h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="form-group">
+                                            <label class="control-label">Created</label>
+                                            <h3><span class="label label-primary">{% if file %}{{ file.getShortCreatedDate }}{% endif %}</span></h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="form-group">
+                                            <label class="control-label">Modified</label>
+                                            <h3><span class="label label-primary">{% if file %}{{ file.getShortModifiedDate }}{% endif %}</span></h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="control-label">History</label>
+                                        <table id="file-tags" class="table-striped table">
+                                            <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>User</th>
+                                                <th>Status</th>
+                                                <th>Notes</th>
+                                                <th>Created</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for fileTag in file.getFileTags %}
+                                                <tr>
+                                                    <td>{{ loop.index }}</td>
+                                                    <td>{{ fileTag.getUser.getCompleteName()|e }}</td>
+                                                    <td>{{ fileTag.getFormattedCurrentStatus|raw }}</td>
+                                                    <td>{{ fileTag.notes|e }}</td>
+                                                    <td>{{ fileTag.getShortCreatedDate|e }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}{% endblock %}

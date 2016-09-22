@@ -1,0 +1,206 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Investigate Files{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper" xmlns="http://www.w3.org/1999/html">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Investigate Files</h1>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/um/users/investigate/edit">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Oh snap!</strong> {{ error }}
+                    </div>
+                {% endif %}
+                <div class="col-lg-12">
+                    <input type="hidden" name="id" {% if file %}value="{{ file.id }}"{% endif %} />
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Path</label>
+                                        <h3><span class="label label-primary wrap">{% if file %}{{ file.path }}{% endif %}</span></h3>
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+                                    <div class="form-group">
+                                        <label class="control-label">Batch Id</label>
+                                        <h3><span class="label label-primary wrap">{% if file %}{{ file.batch_id }}{% endif %}</span></h3>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Match</label>
+                                            <h3><span class="label label-primary">{% if file %}{{ file.match_count }}{% endif %}</span></h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="form-group">
+                                            <label class="control-label">Created</label>
+                                            <h3><span class="label label-primary">{% if file %}{{ file.getShortCreatedDate }}{% endif %}</span></h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="form-group">
+                                            <label class="control-label">Modified</label>
+                                            <h3><span class="label label-primary">{% if file %}{{ file.getShortModifiedDate }}{% endif %}</span></h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="col-lg-7">
+                                    <div class="form-group">
+                                        <label class="control-label">Owner</label>
+                                        <h4><span class="label label-primary">{% if file %}{{ file.owner }}{% endif %}</span></h4>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Table</label>
+                                        <h4><span class="label label-primary wrap">{% if file %}{{ file.table_text }}{% endif %}</span></h4>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="status">Status</label>
+                                        <h3>
+                                            <select id="status" name="status" class="form-control">
+                                                <option value="1" {% if file.getCurrentStatus == 1 %}selected{% endif %}>Duplicate</option>
+                                                <option value="2" {% if file.getCurrentStatus == 2 %}selected{% endif %}>Suspected</option>
+                                                <option value="3" {% if file.getCurrentStatus == 3 %}selected{% endif %}>WIP</option>
+                                                <option value="4" {% if file.getCurrentStatus == 4 %}selected{% endif %}>Positive</option>
+                                                <option value="5" {% if file.getCurrentStatus == 5 %}selected{% endif %}>False Positive</option>
+                                                <option value="6" {% if file.getCurrentStatus == 6 %}selected{% endif %}>Securely Deleted</option>
+                                                <option value="7" {% if file.getCurrentStatus == 7 %}selected{% endif %}>Recycle Bin</option>
+                                                <option value="8" {% if file.getCurrentStatus == 8 %}selected{% endif %}>File Not Found</option>
+                                                <option value="9" {% if file.getCurrentStatus == 9 %}selected{% endif %}>No Access</option>
+                                            </select>
+                                        </h3>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Suspected Owner</label>
+                                        <h3>
+                                            <select id="suspected-owner" name="suspected-owner" class="form-control">
+                                                <option value="0">Select suspected owner</option>
+                                                {% for user in users %}
+                                                    <option value="{{ user.id }}" {% if user.id == file.suspected_owner %}selected{% else %}{% if user.id == found %}selected{% endif %}{% endif %}>{{ user.last_name }}, {{ user.first_name }} {{ user.middle_name }} ({{ user.getStatus()[user.status]|capitalize }}) - {{ user.acquire_id }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="col-lg-12">
+                                        <label class="control-label">CAF Count</label>
+                                        <h4><span class="label label-primary" id="caf-count">{% if userFound.count() > 0 %}{{ userFound.getCountDpf() }}{% else %}0{% endif %}</span></h4>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        {% if (file.image_path) %}
+                                            <em><p class="help-block"><small>(Click to enlarge)</small></p></em>
+                                            <div class="col-lg-9">
+                                                <div class="form-group">
+                                                    <a href="{{ file.image_path }}/{{ file.image_name }}" rel="prettyPhoto" title="{{ file.image_name }}">
+                                                        <img src="{{ file.image_path }}/{{ file.image_name }}" class="img-thumbnail" alt="{{ file.image_name }}" />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="image">Upload Image</label>
+                                                <input type="file" name="image" id="image">
+                                                <p class="help-block"><small>The image should be in jpeg/jpg/png format.</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="form-group">
+                                    <label class="control-label">Cards</label>
+                                    <table id="cards" class="table-striped table">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Type</th>
+                                                <th>Count</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for card in file.getCards() %}
+                                            <tr>
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ card.value|e }}</td>
+                                                <td>{{ card.count|e }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Samples</label>
+                                    <h4><span class="label label-primary">{% if file %}{{ file.samples|replace({',': ', '}) }}{% endif %}</span></h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="control-label" for="notes">Notes</label>
+                                        <textarea class="form-control" name="notes" id="notes" rows="3" placeholder="Write notes">{{ file.getCurrentNotes }}</textarea>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {% raw %}
+        <script>
+            $(document).ready(function(){
+                $defaultStatus = $('#status').val();
+                $defaultDpfCount = $('#caf-count').text();
+
+
+                $("a[rel^='prettyPhoto']").prettyPhoto({
+                    theme:'light_square',
+                    social_tools: false
+                });
+
+                $("#suspected-owner").change(function() {
+                    $.ajax({
+                        url: '/um/users/investigate/update_status',
+                        type: "POST",
+                        "data": {
+                            "suspected_owner" : $("#suspected-owner").val()
+                        },
+                        success: function (data) {
+                            if (data) {
+                                $('#status').val(3);
+                                $('#caf-count').text(data);
+                            } else {
+                                $('#status').val($defaultStatus);
+
+                                if (data == 0) {
+                                    $('#caf-count').text(0);
+                                } else {
+                                    $('#caf-count').text($defaultDpfCount);
+                                }
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+    {% endraw %}
+{% endblock %}

@@ -1,0 +1,300 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Dashboard{% endblock %}
+
+{% block isDashboard %}active{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Dashboard</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-exclamation-circle fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ totalSuspected }}</div>
+                                <div>Total Suspected Files</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/um/files/status/2">
+                        <div class="panel-footer">
+                            <span class="pull-left">View List</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-yellow">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-warning fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ totalPositive }}</div>
+                                <div>Total Positive Files</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/um/files/status/4">
+                        <div class="panel-footer">
+                            <span class="pull-left">View List</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-legal fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ totalDpf }}</div>
+                                <div>Total Pending Files (DPF)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/um/files/status/1">
+                        <div class="panel-footer">
+                            <span class="pull-left">View List</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-red">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-edit fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ totalCaf }}</div>
+                                <div>Total Pending Files (CAF)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/um/dpf/status/all">
+                        <div class="panel-footer">
+                            <span class="pull-left">View List</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bell fa-fw"></i> Notifications Panel
+                    </div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                            {% if loggedInUser.type >= 2 %}
+                                <a href="/um/files/status/2" class="list-group-item">
+                                    <i class="fa fa-exclamation-circle fa-fw"></i> <span>New Suspected Files <span class="badge">{{ suspectedFileTotal.count() }}</span></span>
+                                    <span class="pull-right text-muted small"><em>{% if suspectedFileTotal.count() > 0 %}Last {{ suspectedFileTotal.0.created_at }}{% endif %}</em></span>
+                                </a>
+                                <a href="/um/files/status/4" class="list-group-item">
+                                    <i class="fa fa-warning fa-fw"></i> <span>New Positive Files <span class="badge">{{ positiveFileTotal.count() }}</span></span>
+                                    <span class="pull-right text-muted small"><em>{% if positiveFileTotal.count() > 0 %}Last {{ positiveFileTotal.0.created_at }}{% endif %}</em></span>
+                                </a>
+                                <a href="/um/files/status/3" class="list-group-item">
+                                    <di class="glyphicon glyphicon-hourglass"></di> <span>Work in Progress <span class="badge">{{ wipFileTotal.count() }}</span></span>
+                                    <span class="pull-right text-muted small"><em>{% if wipFileTotal.count() > 0 %}Last {{ wipFileTotal.0.created_at }}{% endif %}</em></span>
+                                </a>
+                            {% endif %}
+                            <a href="/um/dpf/status/all" class="list-group-item">
+                                <i class="fa fa-legal fa-fw"></i> <span>New DPF To-Dos <span class="badge">{{ dpfTodoTotal.count() }}</span></span>
+                                <span class="pull-right text-muted small"><em>{% if dpfTodoTotal.count() > 0 %}{{ dpf_created_at }} minutes ago{% endif %}</em></span>
+                            </a>
+                            <a href="/um/caf/status/all" class="list-group-item">
+                                <i class="fa fa-edit fa-fw"></i> <span>New CAF To-Dos <span class="badge">{{ cafTodoTotal.count() }}</span></span>
+                                <span class="pull-right text-muted small"><em>{% if cafTodoTotal.count() > 0 %}{{ caf_created_at }} minutes ago{% endif %}</em></span>
+                            </a>
+                            <!-- HR and above tasks-->
+                            {% if loggedInUser.type >= 3 %}
+                                <a href="/um/caf/status/2" class="list-group-item">
+                                    <i class="fa fa-edit fa-fw"></i> <span>New Mark Securely Deleted <span class="badge">{{ cafMarkSecurelyDeletedTotal.count() }}</span></span>
+                                    <span class="pull-right text-muted small"><em>{% if cafMarkSecurelyDeletedTotal.count() > 0 %}{{ created_at }} minutes ago{% endif %}</em></span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i> Bar Chart - Status Comparison
+                        <div class="input-group">
+                            <input name="date-from-chart" id="date-from-chart" type="date" class="form-control" value="{% if date %}{{ date|date("Y-m-d") }}{% else %}{{ "now"|date_modify("-7 day")|date("Y-m-d") }}{% endif %}"/>
+                            <span class="input-group-btn" style="width:0px;"></span>
+                            <input name="date-to-chart" id="date-to-chart" type="date" class="form-control" value="{% if date %}{{ date|date("Y-m-d") }}{% else %}{{ "now"|date("Y-m-d") }}{% endif %}"/>
+                            <span class="input-group-btn">
+                                <button id="btn-refresh-chart" class="btn btn-default glyphicon glyphicon-refresh" style="margin-top: -1px;"></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="pull-right">
+                                <div id="container-dashboard-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-table fa-fw"></i> Table - Total Daily Files
+                        <div class="input-group">
+                            <input name="date-from" id="date-from" type="date" class="form-control" value="{% if date %}{{ date|date("Y-m-d") }}{% else %}{{ "now"|date_modify("-7 day")|date("Y-m-d") }}{% endif %}"/>
+                            <span class="input-group-btn" style="width:0px;"></span>
+                            <input name="date-to" id="date-to" type="date" class="form-control" value="{% if date %}{{ date|date("Y-m-d") }}{% else %}{{ "now"|date("Y-m-d") }}{% endif %}"/>
+                            <span class="input-group-btn">
+                                <button id="btn-refresh" class="btn btn-default glyphicon glyphicon-refresh" style="margin-top: -1px;"></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table id="tbl-attendance" class="table-striped table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Duplicate</th>
+                                            <th>Suspected</th>
+                                            <th>WIF</th>
+                                            <th>Positive</th>
+                                            <th>Deleted</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-clock-o fa-fw"></i> Weekly Timeline
+                    </div>
+                    <div class="panel-body">
+                        <ul class="timeline">
+                            {% for key, line in timeLine %}
+                                {% if key is divisible by(2) %}
+                                    <li>
+                                {% else %}
+                                    <li class="timeline-inverted">
+                                {% endif %}
+                                        <div class="timeline-badge warning"><i class="fa fa-calendar"></i></div>
+                                        <div class="timeline-panel">
+                                            <div class="timeline-heading">
+                                                <h4 class="timeline-title">{{ line.day|date('l', 'Asia/Manila') }}</h4>
+                                                <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ line.day|date('j-M-Y', 'Asia/Manila') }}</small>
+                                                </p>
+                                            </div>
+                                            <div class="timeline-body">
+                                                {% for value in line.value %}
+                                                    <p><i class="fa fa-file"></i> {{ value }}</p>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">{{ dashboardChart.render("var dashboardChart")|raw }}</script>
+
+    {% raw %}
+        <script>
+            $(document).ready(function() {
+                // bar chart
+                getChartData();
+
+                function getChartData() {
+                    $.ajax({
+                        url: "/um/dashboard/chart/data",
+                        data: {
+                            dateFrom: $('#date-from-chart').val(),
+                            dateTo: $('#date-to-chart').val()
+                        }
+                    }).done(function(newData) {
+                        updateChart(dashboardChart, newData);
+                    });
+                }
+
+                function updateChart(chart, data) {
+                    var parsedData = $.parseJSON(data);
+                    var i = 0;
+
+                    $.each(parsedData, function(index, value) {
+                        console.log(value);
+                        chart.series[i]['name'] = (value.name);
+                        chart.series[i].setData(value.data);
+                        i++;
+                    });
+                }
+                $("#btn-refresh-chart").click(function () {
+                    getChartData();
+                });
+
+                // dashboard Table
+                var dashboardTable = $('#tbl-attendance').dataTable({
+                    "ajax"          : {
+                        "url"   : '/um/dashboard/data',
+                        "data"  : function (data) {
+                            data.dateFrom = $('#date-from').val();
+                            data.dateTo = $('#date-to').val();
+                        }
+                    },
+                    "bSort"         : false,
+                    "processing"    : true,
+                    "serverSide"    : true,
+                    "bFilter"       : false,
+                    "aoColumns"     : [
+                        { "sWidth"  : "25%" },
+                        { "sWidth"  : "15%" },
+                        { "sWidth"  : "15%" },
+                        { "sWidth"  : "15%" },
+                        { "sWidth"  : "15%" },
+                        { "sWidth"  : "15%" }
+                    ],
+                });
+                $("#btn-refresh").click(function () {
+                    dashboardTable.fnDraw();
+                });
+                $("#date-from").change(function () {
+                    var curr = new Date($("#date-from").val()); // get current date
+                    $("#date-to").val(curr.toJSON().substring(0, 10));
+                });
+            });
+        </script>
+    {% endraw %}
+{% endblock %}

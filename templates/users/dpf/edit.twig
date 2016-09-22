@@ -1,0 +1,309 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Respond DPF{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Respond DPF</h1>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form form-horizontal" role="form" method="post" action="/um/dpf/edit">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Oh snap!</strong> {{ error }}
+                    </div>
+                {% endif %}
+                <div class="col-lg-12">
+                    <input type="hidden" name="id" {% if dpf %}value="{{ dpf.id }}"{% endif %} />
+                    <input type="hidden" name="caf-id" {% if caf %}value="{{ caf.id }}"{% endif %} />
+                    <div class="col-lg-12">
+                        <div class="col-lg-6">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label class="control-label">Acquire ID</label>
+                                    <h3><span class="label label-primary">{% if user.acquire_id %}{{ user.acquire_id }}{% else %}None{% endif %}</span></h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="form-group">
+                                    <label class="control-label">Last Name, First Name Middle Name</label>
+                                    <h3><span class="label label-primary">{% if user %}{{ user.last_name }}, {{ user.first_name }} {{ user.middle_name }}{% endif %}</span></h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="control-label">CAF Count</label>
+                                    <h3><span class="label label-primary">{% if dpf %}{{ dpf.getCountCaf() }}{% else %}0{% endif %}</span></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="col-lg-5">
+                                <div class="form-group">
+                                    <label class="control-label">Designation</label>
+                                    <h3><span class="label label-primary">{% if user %}{{ user.designation }}{% endif %}</span></h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="control-label">Department</label>
+                                    <h3><span class="label label-primary">{% if user %}{{ user.department }}{% endif %}</span></h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label class="control-label">Unit</label>
+                                    <h3><span class="label label-primary">{% if user %}{{ user.unit }}{% endif %}</span></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <hr>
+                    </div>
+                    <div class="col-lg-12">
+                        <h4>Subject: Violation of the Company's Code of Conduct Rule VI Par. 20: Failure to Comply with Acquire BPO Policies and Provisions
+                            Violation of Acquire Card Holder Data Security Policy 5.2 Card Holder Data Handling</h4>
+                        <p style="text-align:justify">
+                            This is to call your attention to specific acts and omissions that you may have committed in violation of the Acquire Asia Pacific Philippines, Inc.'s (hereafter the "Company") existing policies and the Labor Code of the Philippines, as amended.
+                        </p>
+                        <p style="text-align:justify">
+                            A review of the Company's Credit Card Handling and Information Records shows that you may have stored Customer Credit Card information in your computer. A total of {{ dpf.count }} Credit Card Number/s were found either in your computer's local hard drive or network shared folder/s. The above referenced credit card numbers may be found in:
+                        </p>
+                    </div>
+                    <div class="col-lg-12">
+                        <table id="users" class="table-striped table">
+                            <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Batch Id</th>
+                                <th>Path</th>
+                                <th>Created</th>
+                                <th>Matches</th>
+                                <th>Samples</th>
+                                <th style="width:5%;">Image</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for file in user.getActiveFiles(user.id, dpf.id) %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td><small>{{ file.batch_id }}</small></td>
+                                    <td><small>{{ file.path|e }}</small></td>
+                                    <td><small>{{ file.created|date("m/d/y H:i") }}</small></td>
+                                    <td><small>{{ file.match_count|e }}</small></td>
+                                    <td class="ex-css"><small>{% if file.samples is not empty %}<a href="javascript:void(0);" class="link-details fa fa-info-circle" rel="tooltip" title="Samples: {{ file.samples }}"></a>{% endif %} <i>hover</i></small></td>
+                                    <td style="width:5%;"><small>
+                                            {% if (file.image_path) %}
+                                            <a href="{{ file.image_path }}/{{ file.image_name }}" rel="prettyPhoto" title="{{ file.image_name }}">
+                                                <img src="{{ file.image_path }}/{{ file.image_name }}" class="img-thumbnail" alt="{{ file.image_name }}" />
+                                            </a>
+                                            {% endif %}
+                                        </small>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-12">
+                        <p style="text-align:justify">
+                            It is emphasized that the storage of Customer Credit Card Information or Number may prove injurious to the business interest of the Company or to its employees.
+                        </p>
+                        <p style="text-align:justify">
+                            Under the Company existing Rules and Regulations, your act/s may fall on any of the following prohibited acts, to wit:
+                        </p>
+                        <p style="text-align:center">
+                            <b>Rule VI, Par. 20: Failure to Comply with Acquire BPO Policies & Procedures</b>
+                        </p>
+                        <p style="text-align:center">
+                            <i>"Failure to comply or conform to Acquire BPO policies and procedures promulgated from time to time."</i>
+                        </p>
+                        <p style="text-align:center">
+                            <b>Acquire BPO Card Holder Data Security Policy - 5.2 Card Holder Data Handling</b>
+                        </p>
+                        <p style="text-align:justify">
+                            5.2.1. <u>Card Holder Data whether in partial or full must not be stored in any computer office applications such as but not limited
+                            to: MS Office, Notepads and Sticky Notes. CHD stored in any these platforms must be immediately destroyed using secure
+                            disposal process.</u>
+                        </p>
+                        <p style="text-align:justify">
+                            5.2.2. Card Holder Data must not be stored in any type of media (e.g. paper, floppy disks, backup tape, computer hard, etc.) of
+                            the following Card Holder Data in any type of media is strictly prohibited
+                        </p>
+                        <p>
+                            a) The contents of the credit card magnetic strip (track data) on any media whatsoever.
+                        </p>
+                        <p>
+                            b) The CVV/CVC (the 3 or 4 digit number on the signature panel on the reverse of the card) on any media whatsoever.
+                        </p>
+                        <p>
+                            c) Credit Card number whether partial or in full not be stored in any media.
+                        </p>
+                        <p style="text-align:justify">
+                            5.2.3. All digits but the last 4 numbers of the credit card account number must be concealed or masked (e.g. XXXX or **) when
+                            the number needs to be displayed.
+                        </p>
+                        <p style="text-align:justify">
+                            Further, please be advised that Article 282 of the Labor Code, as amended, provides for the grounds when an employer may validly terminate an employee. Applying the said provision in this case, your employment may be terminated under any of the following grounds:
+                        </p>
+                        <p style="text-align:justify">
+                            <b>(a) Serious Misconduct; (b) Gross & Habitual Neglect of Duties; (c) Fraud or willful breach of trust; & or (e) Other Analogous Causes</b>
+                        </p>
+                        <p style="text-align:justify">
+                            In this regard, please submit your written explanation with all your evidences within  {% if (dpf.count == 1) %}48{% else %}120{% endif %} hours from receipt of this document, why no disciplinary action should be taken against you. Please do not fail or refuse to submit your written explanation within the given period for it would be interpreted as a waiver for your right to present your evidence(s). In such a case, we shall resolve the matter based on records or documents available to us. Please be advised that the aforementioned violation/s may warrant corrective action of up to Termination of Employment under the Company Policy or Code of Conduct.
+                        </p>
+                    </div>
+                    <div class="col-lg-12">
+                        <hr>
+                    </div>
+                    {% if loggedInUser.type == 1 %}
+                        {% if dpf.status > 2  %}
+                            {% set isDisabled = 'disabled' %}
+                        {% endif %}
+                        <div class="col-lg-12">
+                            <h4>Employee's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="status" id="status" value="2" checked {{ isDisabled }}>Response
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-notes">Notes</label>
+                                    <textarea class="form-control" name="employee-notes" id="employee-notes" rows="3" placeholder="Write notes" required {{ isDisabled }}>{{ dpf.employee_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        {% if dpf.status != 2  %}
+                            {% set isDisabled = 'disabled' %}
+                        {% endif %}
+                        <div class="col-lg-12">
+                            <h4>Employee's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="employee-status" id="employee-status" value="2" disabled checked>Responded
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="employee-notes">Notes</label>
+                                    <textarea class="form-control" name="employee-notes" id="employee-notes" rows="3" placeholder="Write notes" disabled>{{ dpf.employee_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <hr>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4>HR's Response</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="status">Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="status" id="status" value="3" {% if dpf.status == 3 %}checked{% endif %} {{ isDisabled }}>Lifted
+                                        </label>
+                                    </div>
+                                    {% if (dpf.status != 4 and dpf.getCountDPF() > 1) %}
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="status" id="status" value="4" {% if dpf.status == 4 %}checked{% endif %} {{ isDisabled }}>For Admin Hearing
+                                            </label>
+                                        </div>
+                                    {% endif %}
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="status" id="status" value="5" {% if dpf.status == 5 %}checked{% endif %} {{ isDisabled }}>For CAF
+                                        </label>
+                                    </div>
+                                    <div class="col-lg-3 col-lg-offset-1">
+                                        <div class="form-group">
+                                            <label class="control-label">CAF Status</label>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="caf-status" value="1" {% if caf.status == 1 %}checked{% endif %} {{ isDisabled }}>Final Warning
+                                                </label>
+                                            </div>
+                                            {% if (dpf.getCountDPF() > 1) %}
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="caf-status" value="2" {% if caf.status == 2 %}checked{% endif %} {{ isDisabled }}>Last Final Warning
+                                                    </label>
+                                                </div>
+                                            {% endif %}
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="caf-status" value="3" {% if caf.status == 3 %}checked{% endif %} {{ isDisabled }}>Termination
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="hr-notes">Notes</label>
+                                    <textarea class="form-control" name="hr-notes" id="hr-notes" rows="3" placeholder="Write notes" required {{ isDisabled }}>{{ dpf.hr_notes }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-12">
+                        <hr>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {% raw %}
+        <script>
+            $(document).ready(function() {
+                if ($('#status:checked').val() != 5) {
+                    removeTicks();
+                }
+
+                $("a[rel^='prettyPhoto']").prettyPhoto({
+                    theme:'light_square',
+                    social_tools: false
+                });
+            });
+
+            $("input[name=status]:radio").change(function() {
+                if ($(this).val() != 5) {
+                    removeTicks();
+                } else {
+                    $('input[name=caf-status]:radio:first').prop('checked', true);
+                    $('input[name=caf-status]:radio').each(function () {
+                        $(this).prop('disabled', false);
+                    });
+                }
+            });
+
+            function removeTicks() {
+                $('input[name=caf-status]:radio').each(function () {
+                    $(this).prop("checked", false);
+                    $(this).prop('disabled', true);
+                });
+            }
+        </script>
+    {% endraw %}
+{% endblock %}

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        {% include "partials/application/head.twig" %}
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                {% include "partials/application/header.twig" %}
+                {% if loggedInUser %}
+                    <div class="navbar-default sidebar" role="navigation">
+                        <div class="sidebar-nav navbar-collapse">
+                            <ul class="nav" id="side-menu">
+                                {% if loggedInUser.type > 1 %}
+                                    <li class="sidebar-search">
+                                        <form class="form form-horizontal" role="form" method="post" action="/um/search">
+                                            <div class="input-group custom-search-form">
+                                                <input type="text" class="form-control" name="search" placeholder="Search..." value="{% if (search is not empty) %}{{ search }}{% endif %}">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default" type="submit">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <a href="/um/dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                                    </li>
+                                {% endif %}
+                                {% if loggedInUser.type == 2 or loggedInUser.type == 4 %}
+                                    <li>
+                                        <a href="#"><i class="fa fa-files-o fa-fw"></i> Batch<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a href="/um/files/import"><i class="fa fa-upload fa-fw"></i> Import Files</a>
+                                            </li>
+                                            <li>
+                                                <a href="/um/files/list"><i class="fa fa-th-list fa-fw"></i> List of Files</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="/um/files/status/2"><i class="fa fa-eye fa-fw"></i> For Investigation</a>
+                                    </li>
+                                {% endif %}
+                                {% if loggedInUser.type == 2 or loggedInUser.type == 3 or loggedInUser.type == 4 %}
+                                    <li>
+                                        <a href="#"><i class="fa fa-tags fa-fw"></i> File Status<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level collapse in">
+                                            <li>
+                                                <a href="/um/files/status/1"><i class="glyphicon glyphicon-duplicate"></i> Duplicates</a>
+                                            </li>
+                                            <li>
+                                                <a href="/um/files/status/5"><i class="fa fa-plus-circle fa-fw"></i> False Positive</a>
+                                            </li>
+                                            <li>
+                                                <a href="/um/files/status/2"><i class="fa fa-exclamation-circle"></i> Suspected</a>
+                                            </li>
+                                            <li>
+                                                <a href="/um/files/status/4"><i class="fa fa-warning fa-fw"></i> Positive</a>
+                                            </li>
+                                            <li>
+                                                <a href="/um/files/status/3"><i class="glyphicon glyphicon-hourglass"></i> WIP</a>
+                                            </li>
+                                            <li>
+                                                <a href="/um/files/status/6"><i class="fa fa-trash-o fa-fw"></i> Securely Deleted</a>
+                                            </li>
+                                            <li>
+                                                <a href="/um/files/status/7"><i class="fa fa-recycle fa-fw"></i> Recycle Bin</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                                {% if loggedInUser.type == 1 or loggedInUser.type == 3 or loggedInUser.type == 4 %}
+                                    <li>
+                                        <a href="#"><i class="fa fa-legal fa-fw"></i> DPF<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            {% if loggedInUser.type == 1 %}
+                                                <li>
+                                                    <a href="/um/dpf/status/1"> DPF Todo (For Response)</a>
+                                                </li>
+                                            {% else %}
+                                                <li>
+                                                    <a href="/um/dpf/create"> Generate DPF</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/um/dpf/status/2"> DPF Todo (For Response)</a>
+                                                </li>
+                                            {% endif %}
+                                            <li>
+                                                <a href="/um/dpf/status/all"> DPF List</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                                {% if loggedInUser.type != 1 %}
+                                    <li>
+                                        <a href="#"><i class="fa fa-edit fa-fw"></i> CAF<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            {% if loggedInUser.type == 3 %}
+                                                <li>
+                                                    <a href="/um/caf/status/2"> For Secure Deletion</a>
+                                                </li>
+                                            {% elseif loggedInUser.type == 2 %}
+                                                <li>
+                                                    <a href="/um/caf/status/5"> Mark Securely Deleted</a>
+                                                </li>
+                                            {% elseif loggedInUser.type == 4 %}
+                                                <li>
+                                                    <a href="/um/caf/status/4"> For Approval</a>
+                                                </li>
+                                            {% endif %}
+                                            <li>
+                                                <a href="/um/caf/status/all"> CAF List</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                                {% if loggedInUser.type == 3 or loggedInUser.type == 4 %}
+                                    <li>
+                                        <a href="#"><i class="fa fa-gear fa-fw"></i> Tools<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a href="/um/users/import"><i class="fa fa-upload fa-fw"></i> Upload Users</a>
+                                            </li>
+                                            <li>
+                                                <a href="/um/users/list"><i class="fa fa-users fa-fw"></i> List of Users</a>
+                                            </li>
+                                            <li>
+                                                <a href="/um/settings"><i class="fa fa-tasks fa-fw"></i> Settings</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="glyphicon glyphicon-print"></i> Reports<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a href="/um/users/import"><i class="glyphicon glyphicon-calendar"></i> Summary</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            </nav>
+
+            {% block content %}{% endblock %}
+        </div>
+        <div class="footer">
+            {% include "partials/application/footer.twig" %}
+        </div>
+
+        {% include "partials/application/scripts.twig" %}
+        {% include "partials/application/popup.twig" %}
+
+        {% block js %}{% endblock %}
+    </body>
+</html>

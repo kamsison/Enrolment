@@ -1,0 +1,31 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Login{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Please Sign In</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="/um/users/login" method="post">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="E-mail" name="email" type="email" required autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                            </div>
+                            {% if (flash.error) %}
+                                <div class="alert alert-danger" role="alert"><strong>Oh snap!</strong> {{ flash.error }}</div>
+                            {% endif %}
+                            <button class="btn btn-lg btn-primary btn-block" type="submit">LOGIN</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
