@@ -16,12 +16,12 @@
                             <strong>Oh snap!</strong> {{ error }}
                         </div>
                     {% endif %}
-                    <div class="col-lg-12">
+                    <div class="col-sm-12">
 
                         <div class="row">
                             <div class="input-group row">
                                 <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/Enrolment/students/update">
-                                <div class="col-lg-12">
+                                <div class="col-sm-12">
 
                                         <div class="form-group">
                                             <label class="control-label">First Name</label>
@@ -61,6 +61,7 @@
                                                 <option value="Widowed" {% if student.civil_status_id == "Widowed" %}selected{% endif %}>Widowed</option>
                                             </select>
                                         </div>
+                                    <!-----
                                         <div class="form-group">
                                             <label class="control-label">Course Id</label>
                                             <input type="text" class="form-control" id="course_id" name="course_id">
@@ -69,8 +70,10 @@
                                             <label class="control-label">YearLevel</label>
                                             <input type="text" class="form-control" id="year_level" name="year_level">
                                         </div>
+                                             -->
                                         <div class="form-group">
-                                            <input type="submit" name="submit" value="Save Record" />
+                                            <input type="submit" class="btn btn-warning btn-sm btn-block" name="submit" value="Save Record" />
+
                                         </div>
                                 </div>
                             <?php
