@@ -16,13 +16,13 @@
             </div>
             <div class="col-md-4">
 
-                <a class="btn btn-warning" href="/um/assessment/add" role="button">Add Assessment</a>
+                <a class="btn btn-warning" href="/Enrolment/assessments/add" role="button">Add Assessment</a>
 
             </div>
         </div>
         <div class="col-lg-12">
             <div class="row">
-                <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/um/users/import">
+                <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/Enrolment/users/import">
                     {% if error %}
                         <div class="alert alert-danger" role="alert">
                             <strong>Oh snap!</strong> {{ error }}
@@ -56,7 +56,7 @@
                                         <td>{{ assessment.payola|e }}</td>
                                         <td>{{ assessment.tuition+assessment.fix_charges+assessment.payola }}</td>
                                         <td>{{ assessment.updated_at|e }}</td>
-                                        <td><span ><a href="/um/assessment/{{ assessment.id }}/edit">Edit</a></span>&nbsp;|&nbsp;<span><a onclick="return confirm('Are you sure you want to securely delete this item?');" href="/um/assessment/{{ assessment.id }}/delete">Delete</a></span></td>
+                                        <td><span ><a href="/Enrolment/assessments/{{ assessment.id }}/edit">Edit</a></span>&nbsp;|&nbsp;<span><a onclick="return confirm('Are you sure you want to securely delete this item?');" href="/Enrolment/assessments/{{ assessment.id }}/delete">Delete</a></span></td>
 
                                     </tr>
                                 {% endfor %}
