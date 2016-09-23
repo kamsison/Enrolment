@@ -115,6 +115,12 @@ require ROUTES_DIR . '/users/settings.php';
 require ROUTES_DIR . '/payments/payment.php';
 require ROUTES_DIR . '/assessments/assessment.php';
 require ROUTES_DIR . '/assets.php';
+require ROUTES_DIR . '/payments/payment.php';
+require ROUTES_DIR . '/students/students.php';
+
+
+require ROUTES_DIR . '/students/students.php';
+
 
 // renders default page
 $app->get('/', function () use ($app) {

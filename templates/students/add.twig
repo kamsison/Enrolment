@@ -1,0 +1,79 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Add Students Information{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Add Students Information</h1>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="row">
+                        {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Oh snap!</strong> {{ error }}
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-12">
+
+                        <div class="row">
+                            <div class="input-group row">
+                                <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/Enrolment/students/update">
+                                <div class="col-lg-12">
+
+                                        <div class="form-group">
+                                            <label class="control-label">First Name</label>
+                                            <input type="text" class="form-control"  id="first_name" name="first_name">
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Middle Name</label>
+                                            <input type="text" class="form-control" id="middle_name" name="middle_name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Last Name</label>
+                                            <input type="text" class="form-control" id="last_name" name="last_name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Birth Date</label>
+                                            <input type="date" class="form-control" id="birth_date" name="birth_date">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Gender</label>
+                                            <select id="gender" name="gender" class="form-control">
+                                                <option value="Male" {% if student.gender == "Male" %}selected{% endif %}>Male</option>
+                                                <option value="Female" {% if student.gender == "Female" %}selected{% endif %}>Female</option>
+                                            </select>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Address</label>
+                                            <input type="text" class="form-control" id="address" name="address">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Civil Status</label>
+                                            <select id="civil_status_id" name="civil_status_id" class="form-control">
+                                                <option value="Single" {% if student.civil_status_id == "Single" %}selected{% endif %}>Single</option>
+                                                <option value="Married" {% if student.civil_status_id == "Married" %}selected{% endif %}>Married</option>
+                                                <option value="Divorced" {% if student.civil_status_id == "Divorced" %}selected{% endif %}>Divorced</option>
+                                                <option value="Widowed" {% if student.civil_status_id == "Widowed" %}selected{% endif %}>Widowed</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Course Id</label>
+                                            <input type="text" class="form-control" id="course_id" name="course_id">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">YearLevel</label>
+                                            <input type="text" class="form-control" id="year_level" name="year_level">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit" name="submit" value="Save Record" />
+                                        </div>
+                                </div>
+                            <?php
+                         </div>
+
+{% endblock %}
