@@ -2,3 +2,4 @@ logs/
 storage/
 references/
 vendor/
+.htaccess/
