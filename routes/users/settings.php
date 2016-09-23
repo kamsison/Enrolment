@@ -13,5 +13,5 @@ $app->post('/settings', function() use ($app) {
         $setting->save();
     }
 
-    return $app->redirect('/um/settings');
+    return $app->redirect('/Enrolment/settings');
 });

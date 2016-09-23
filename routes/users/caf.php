@@ -48,14 +48,14 @@ $app->get('/caf/data/:status', function($status) use ($app) {
     foreach ($cafs as $caf) {
         $action = '';
         if ($status != 'all') {
-            $action = '<span><a href="/um/caf/' . $caf->caf_id . '/edit">Respond</a></span>&nbsp;</span>&nbsp;|&nbsp;';
+            $action = '<span><a href="/Enrolment/caf/' . $caf->caf_id . '/edit">Respond</a></span>&nbsp;</span>&nbsp;|&nbsp;';
         }
-        $action .= '<a href="/um/caf/' . $caf->caf_id . '/print" target="_blank">Print PDF</a>';
+        $action .= '<a href="/Enrolment/caf/' . $caf->caf_id . '/print" target="_blank">Print PDF</a>';
 
         $data[] = [
             $skip++,
-            '<span><a href="/um/caf/' . $caf->caf_id . '/edit">' . $caf->caf_id . '</a></span>',
-            '<span><a href="/um/dpf/' . $caf->dpf_id . '/edit">' . $caf->dpf_id . '</a></span>',
+            '<span><a href="/Enrolment/caf/' . $caf->caf_id . '/edit">' . $caf->caf_id . '</a></span>',
+            '<span><a href="/Enrolment/dpf/' . $caf->dpf_id . '/edit">' . $caf->dpf_id . '</a></span>',
             $caf->acquire_id,
             $caf->last_name,
             $caf->first_name,
@@ -139,12 +139,12 @@ $app->post('/caf/edit', function() use ($app) {
         }
     }
 
-    $app->redirect("/um/caf/status/all");
+    $app->redirect("/Enrolment/caf/status/all");
 });
 
 $app->get('/caf/:id/delete', function($id) use ($app) {
     \um\models\Caf::find($id)->delete();
-    $app->redirect("/um/caf/status/all");
+    $app->redirect("/Enrolment/caf/status/all");
 })->name('cafIdDelete');
 
 $app->get('/caf/:id/print', function($id) use ($app) {

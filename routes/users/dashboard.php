@@ -262,7 +262,7 @@ $app->get('/files/data/:status', function($status) use ($app) {
     $data = [];
     foreach ($files as $file) {
         if ($file->dpf_id == 0) {
-            $action = '<span ><a href="/um/users/investigate/' . $file->id . '/edit">Investigate</a></span>&nbsp;|&nbsp;<span><a onclick="return confirm(\'Are you sure you want to securely delete this item?\');" href="/um/users/investigate/' . $file->id . '/delete">Delete</a></span>';
+            $action = '<span ><a href="/Enrolment/users/investigate/' . $file->id . '/edit">Investigate</a></span>&nbsp;|&nbsp;<span><a onclick="return confirm(\'Are you sure you want to securely delete this item?\');" href="/Enrolment/users/investigate/' . $file->id . '/delete">Delete</a></span>';
         } else {
             $action = '<span style="color: darkgray"><small>Investigate</small></span>&nbsp;|&nbsp;<span style="color: darkgray"><small>Delete</small></span>';
             $action .= '<a href="javascript:void(0);" class="link-details fa fa-info-circle" rel="tooltip" title="This file is being used in DPF/CAF"></a>';
@@ -270,7 +270,7 @@ $app->get('/files/data/:status', function($status) use ($app) {
         $data[] = [
             $skip++,
             $file->batch_id,
-            '<span><a href="/um/users/investigate/' . $file->id . '/view" target="_blank">' . $file->path . '</a></span>',
+            '<span><a href="/Enrolment/users/investigate/' . $file->id . '/view" target="_blank">' . $file->path . '</a></span>',
             $file->match_count,
             $file->getShortCreatedDate(),
             $file->getShortModifiedDate(),

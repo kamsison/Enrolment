@@ -4,7 +4,7 @@ $isAuthenticated = function () use ($app) {
     if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
         return true;
     }
-    return $app->redirect('/um/users/login');
+    return $app->redirect('/Enrolment/users/login');
 };
 
 $isLoggedUser = function($route) use ($app) {
