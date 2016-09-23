@@ -1,0 +1,72 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Student Assessment{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Student Assessment</h1>
+            </div>
+            <div class="col-md-4">
+
+                <a class="btn btn-warning" href="/Enrolment/assessments/add" role="button">Add Assessment</a>
+
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="row">
+                <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/Enrolment/users/import">
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Oh snap!</strong> {{ error }}
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <table id="cards" class="table-striped table">
+                                <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Course</th>
+                                    <th>Year</th>
+                                    <th>Tuition</th>
+                                    <th>Fix Charges</th>
+                                    <th>Payola</th>
+                                    <th>Total Assessment</th>
+                                    <th>Updated</th>
+                                    <th>Actions</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for assessment in assessments %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ assessment.course|e }}</td>
+                                        <td>{{ assessment.year_level|e }}</td>
+                                        <td>{{ assessment.tuition|e }}</td>
+                                        <td>{{ assessment.fix_charges|e }}</td>
+                                        <td>{{ assessment.payola|e }}</td>
+                                        <td>{{ assessment.tuition+assessment.fix_charges+assessment.payola }}</td>
+                                        <td>{{ assessment.updated_at|e }}</td>
+                                        <td><span ><a href="/Enrolment/assessments/{{ assessment.id }}/edit">Edit</a></span>&nbsp;|&nbsp;<span><a onclick="return confirm('Are you sure you want to securely delete this item?');" href="/Enrolment/assessments/{{ assessment.id }}/delete">Delete</a></span></td>
+
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
