@@ -31,7 +31,7 @@ $app->post('/assessments/add',$isAuthenticated, function() use ($app) {
     $assessment->payola = $app->request->post('payola');
 
     $assessment->save();
-    $app->redirect("/um/assessment");
+    $app->redirect("/Enrolment/assessment");
 })->name('usersId');
 // end post
 
