@@ -1,6 +1,6 @@
 {% extends "layouts/admin.twig" %}
 
-{% block title %}UM | Import Users{% endblock %}
+{% block title %}UM | Payment History{% endblock %}
 
 {% block content %}
     <div id="page-wrapper">
@@ -19,6 +19,7 @@
                         <th>Payment Mode</th>
                         <th>Reference Number</th>
                         <th>Payment For</th>
+                        <th>Period</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -29,6 +30,7 @@
                             <td>{{ payment.description }}</td>
                             <td>{{ payment.reference_number }}</td>
                             <td>{{ payment.fee_id }}</td>
+                            <td>{{ payment.semester }} {{ payment.school_year }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
