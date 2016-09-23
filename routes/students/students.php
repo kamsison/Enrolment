@@ -41,8 +41,7 @@ $app->post('/students/update', function() use ($app) {
     $student->gender = $app->request->post('gender');
     $student->address = $app->request->post('address');
     $student->civil_status_id = $app->request->post('civil_status_id');
-    $student->course_id = $app->request->post('course_id');
-    $student->year_level = $app->request->post('year_level');
+
     $student->save();
     $app->redirect("/Enrolment/students");
 })->name('postStudentsStudents');
