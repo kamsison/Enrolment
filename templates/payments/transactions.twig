@@ -15,6 +15,7 @@
                     <thead>
                     <tr>
                         <th>Student ID</th>
+                        <th>Name</th>
                         <th>Transaction Date</th>
                         <th>Amount</th>
                         <th>Payment Mode</th>
@@ -27,6 +28,7 @@
                     {% for payment in payments %}
                         <tr>
                             <td>{{ payment.personal_info_id }}</td>
+                            <td>{{ payment.first_name }} {{ payment.middle_name }} {{ payment.first_name }}</td>
                             <td>{{ payment.created_at }}</td>
                             <td>{{ payment.amount|number_format(2, '.', ',') }}</td>
                             <td>{{ payment.description }}</td>
