@@ -129,7 +129,7 @@ $app->get('/users/data', function() use ($app) {
             $user->designation,
             $user->getShortBirthDate(),
             ucfirst($user->getStatus()[$user->status]),
-            '<span><a href="/um/users/' . $user->id . '">View</a>&nbsp;|&nbsp;<a onclick="return confirm(\'Are you sure you want to delete this item?\');" href="/um/users/' . $user->id . '/delete">Delete</a></span>'
+            '<span><a href="/Enrolment/users/' . $user->id . '">View</a>&nbsp;|&nbsp;<a onclick="return confirm(\'Are you sure you want to delete this item?\');" href="/Enrolment/users/' . $user->id . '/delete">Delete</a></span>'
         ];
     }
     $app->response->header('Content-Type', 'application/json');
@@ -156,19 +156,19 @@ $app->post('/users/login', function() use ($app) {
         $_SESSION['user'] = $user->toArray();
 
         if ($user->type == 1) {
-            $app->redirect('/um/');
+            $app->redirect('/Enrolment/');
         } else {
-            $app->redirect('/um/dashboard');
+            $app->redirect('/Enrolment/dashboard');
         }
     } else {
         $app->flash('error', 'Email and/or password is incorrect.');
-        $app->redirect('/um/users/login');
+        $app->redirect('/Enrolment/users/login');
     }
 });
 
 $app->get('/users/logout', function() use ($app) {
     $_SESSION = [];
-    $app->redirect('/um/users/login');
+    $app->redirect('/Enrolment/users/login');
 });
 
 // user pages
@@ -195,7 +195,7 @@ $app->post('/users/create', function() use ($app) {
     $user->type = $app->request->post('type');
     $user->save();
 
-    $app->redirect("/um/users/{$user->id}");
+    $app->redirect("/Enrolment/users/{$user->id}");
 });
 
 $app->get('/users/:id/delete', function($id) use ($app) {

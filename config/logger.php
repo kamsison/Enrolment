@@ -3,7 +3,7 @@
 $app->configureMode('production', function () use ($app) {
     $app->container->singleton('log', function () {
         $log = new \Monolog\Logger('app');
-        $log->pushHandler(new \Monolog\Handler\StreamHandler('../um/logs/app-production.log', \Monolog\Logger::INFO));
+        $log->pushHandler(new \Monolog\Handler\StreamHandler('../Enrolmentlogs/app-production.log', \Monolog\Logger::INFO));
         return $log;
     });
 });
@@ -19,7 +19,7 @@ $app->configureMode('staging', function () use ($app) {
 $app->configureMode('development', function () use ($app) {
     $app->container->singleton('log', function () {
         $log = new \Monolog\Logger('app');
-        $log->pushHandler(new \Monolog\Handler\StreamHandler('../um/logs/app-development.log', \Monolog\Logger::DEBUG));
+        $log->pushHandler(new \Monolog\Handler\StreamHandler('../Enrolment/logs/app-development.log', \Monolog\Logger::DEBUG));
         return $log;
     });
 });
@@ -27,7 +27,7 @@ $app->configureMode('development', function () use ($app) {
 $app->configureMode('test', function () use ($app) {
     $app->container->singleton('log', function () {
         $log = new \Monolog\Logger('app');
-        $log->pushHandler(new \Monolog\Handler\StreamHandler('../um/logs/app-test.log', \Monolog\Logger::DEBUG));
+        $log->pushHandler(new \Monolog\Handler\StreamHandler('../Enrolment/logs/app-test.log', \Monolog\Logger::DEBUG));
         return $log;
     });
 });

@@ -37,7 +37,7 @@ $app->post('/dpf/create', function() use ($app) {
         }
     }
 
-    $app->redirect('/um/dpf/create');
+    $app->redirect('/Enrolment/dpf/create');
 });
 
 // lists dpf
@@ -91,13 +91,13 @@ $app->get('/dpf/data/:status', function($status) use ($app) {
     foreach ($dpfs as $dpf) {
         $action = '';
         if ($status != 'all') {
-            $action = '<span><a href="/um/dpf/' . $dpf->dpf_id . '/edit">Respond</a></span>&nbsp;</span>&nbsp;|&nbsp;';
+            $action = '<span><a href="/Enrolment/dpf/' . $dpf->dpf_id . '/edit">Respond</a></span>&nbsp;</span>&nbsp;|&nbsp;';
         }
-        $action .= '<a href="/um/dpf/' . $dpf->dpf_id . '/print" target="_blank">Print PDF</a>';
+        $action .= '<a href="/Enrolment/dpf/' . $dpf->dpf_id . '/print" target="_blank">Print PDF</a>';
 
         $data[] = [
             $skip++,
-            '<span><a href="/um/dpf/' . $dpf->dpf_id . '/edit">' . $dpf->dpf_id . '</a></span>',
+            '<span><a href="/Enrolment/dpf/' . $dpf->dpf_id . '/edit">' . $dpf->dpf_id . '</a></span>',
             $dpf->acquire_id,
             $dpf->last_name,
             $dpf->first_name,
@@ -157,12 +157,12 @@ $app->post('/dpf/edit', function() use ($app) {
         }
     }
 
-    $app->redirect("/um/dpf/status/all");
+    $app->redirect("/Enrolment/dpf/status/all");
 });
 
 $app->get('/dpf/:id/delete', function($id) use ($app) {
     \um\models\Dpf::find($id)->delete();
-    $app->redirect("/um/dpf/status/all");
+    $app->redirect("/Enrolment/dpf/status/all");
 })->name('dpfIdDelete');
 
 $app->get('/dpf/:id/print', function($id) use ($app) {

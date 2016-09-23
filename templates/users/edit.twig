@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="row">
-            <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/um/users/investigate/edit">
+            <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/Enrolment/users/investigate/edit">
                 {% if error %}
                     <div class="alert alert-danger" role="alert">
                         <strong>Oh snap!</strong> {{ error }}
@@ -179,7 +179,7 @@
 
                 $("#suspected-owner").change(function() {
                     $.ajax({
-                        url: '/um/users/investigate/update_status',
+                        url: '/Enrolment/users/investigate/update_status',
                         type: "POST",
                         "data": {
                             "suspected_owner" : $("#suspected-owner").val()
