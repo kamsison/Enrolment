@@ -38,7 +38,7 @@
                                                 <a href="#"><i class="glyphicon glyphicon-registration-mark"></i> Student Information<span class="fa arrow"></span></a>
                                                 <ul class="nav nav-third-level collapse in">
                                                     <li>
-                                                        <a href="/Enrolment/files/status/1"><i class="glyphicon glyphicon-plus-sign"></i> Registration</a>
+                                                        <a href="/Enrolment/students"><i class="glyphicon glyphicon-plus-sign"></i> Registration</a>
                                                     </li>
                                                     <li>
                                                         <a href="/Enrolment/files/status/11"><i class="glyphicon glyphicon-th-list"></i> List of Students</a>
@@ -53,7 +53,15 @@
                                             {% endif %}
                                             {% if loggedInUser.type == 0 or loggedInUser.type == 3 %}
                                                 <li>
-                                                    <a href="/Enrolment/payment"><i class="glyphicon glyphicon-credit-card"></i> Payments</a>
+                                                    <a href="#"><i class="glyphicon glyphicon-credit-card"></i> Payments<span class="fa arrow"></span></a>
+                                                    <ul class="nav nav-third-level collapse in">
+                                                        <li>
+                                                            <a href="/Enrolment/payment"><i class="glyphicon glyphicon-briefcase"></i> New Payment</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/Enrolment/history"><i class="glyphicon glyphicon-th-list"></i> Payment Transactions</a>
+                                                        </li>
+                                                    </ul>
                                                 </li>
                                             {% endif %}
                                         </ul>
