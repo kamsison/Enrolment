@@ -1,0 +1,28 @@
+{
+  "require": {
+    "braintree/braintree_php" : "2.33.0",
+    "fzaninotto/faker": "1.5.*@dev",
+    "illuminate/database": "*",
+    "monolog/monolog": "1.11.*@dev",
+    "meenie/Munee": "*",
+    "nesbot/Carbon": "*",
+    "omnipay/paypal": "~2.0",
+    "robmorgan/phinx": "*",
+    "slim/extras": "dev-master",
+    "slim/slim": "2.*",
+    "slim/strong": "*",
+    "slim/views": "0.1.*",
+    "swiftmailer/swiftmailer": "5.3.*@dev",
+    "symfony/console": "*",
+    "twig/twig": "1.*",
+    "tuupola/slim-basic-auth": "*",
+    "jlinn/mandrill-api-php": "dev-master"
+  },
+  "autoload": {
+    "psr-0": {
+      "prontopram\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "preferred-install": "dist"
+}
