@@ -116,6 +116,10 @@ require ROUTES_DIR . '/assets.php';
 require ROUTES_DIR . '/payments/payment.php';
 require ROUTES_DIR . '/students/students.php';
 
+
+require ROUTES_DIR . '/students/students.php';
+
+
 // renders default page
 $app->get('/', function () use ($app) {
     $app->render('index.twig');
