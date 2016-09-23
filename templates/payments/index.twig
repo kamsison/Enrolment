@@ -1,0 +1,60 @@
+{% extends "layouts/admin.twig" %}
+
+{% block title %}UM | Import Users{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">New Payment</h1>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row">
+                <form class="form form-horizontal" enctype="multipart/form-data" role="form" method="post" action="/Enrolment/payment">
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Oh snap!</strong> {{ error }}
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-12">
+                        <label for="student_id">Student ID:</label>
+                        <input class="form-control" type="text" name="student_id" id="student_id">
+                    </div>
+                    <div class="col-lg-12">
+                        <label for="amount">Amount:</label>
+                        <input class="form-control" type="number" name="amount" id="amount">
+                    </div>
+                    <div class="col-lg-12">
+                        <label for="fee_id">Payment For:</label>
+                        <input class="form-control" type="number" name="fee_id" id="fee_id">
+                    </div>
+                    <div class="col-lg-12">
+                        <label for="payment_mode">Mode:</label>
+                        <select id="payment_mode" class="form-control form" name="payment_mode">
+                            {% for paymentMode in paymentModes %}
+                                <option value="{{ paymentMode.id }}">{{ paymentMode.description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-12">
+                        <label for="reference_number">Reference Number:</label>
+                        <input class="form-control disabled" type="text" name="reference_number" id="reference_number">
+                    </div>
+                    <div class="col-lg-12">
+                        <label for="period">School Year:</label>
+                        <select id="period" class="form-control" name="period">
+                            {% for period in periods %}
+                                <option value="{{ period.id }}">{{ period.school_year }} Sem {{ period.semester }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
