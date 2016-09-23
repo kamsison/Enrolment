@@ -31,7 +31,7 @@ $app->post('/assessments/add',$isAuthenticated, function() use ($app) {
     $assessment->payola = $app->request->post('payola');
 
     $assessment->save();
-    $app->redirect("/Enrolment/assessment");
+    $app->redirect("/Enrolment/assessments");
 })->name('usersId');
 // end post
 
@@ -39,7 +39,7 @@ $app->post('/assessments/add',$isAuthenticated, function() use ($app) {
 $app->get('/assessments/:id/delete',$isAuthenticated, function($id) use ($app) {
     \um\models\Assessment::find($id)->delete();
 
-    $app->redirect("/Enrolment/assessment");
+    $app->redirect("/Enrolment/assessments");
 })->name('getAssessmentIdDelete');
 // end delete
 
@@ -47,7 +47,7 @@ $app->get('/assessments/:id/delete',$isAuthenticated, function($id) use ($app) {
 $app->get('/assessments/:id/edit',$isAuthenticated, function($id) use ($app) {
     $assessment = \um\models\Assessment::find($id);
 
-    $app->render('assessments/add.twig', compact('assessment'));
+    $app->render('assessments/add.twig', compact('assessments'));
 })->name('getAssessmentIdEdit');
 // end edit
 
