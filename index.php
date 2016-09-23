@@ -1,13 +1,13 @@
 <?php
 // defines constant variables
-define('CACHE_DIR',     dirname(__DIR__) . '/um/storage/cache');
-define('MUNEE_CACHE',   CACHE_DIR . '/um/assets');
-define('CONFIG_DIR',    dirname(__DIR__) . '/um/config');
-define('ROUTES_DIR',    dirname(__DIR__) . '/um/routes');
-define('VIEWS_DIR',     realpath(dirname(__DIR__) . '/um/templates'));
-define('IMPORT_DIR',    dirname(__DIR__) . '/um/storage/import');
-define('IMAGE_DIR',     '/um/storage/import');
-define('VENDOR_DIR',    dirname(__DIR__) . '/um/vendor');
+define('CACHE_DIR',     dirname(__DIR__) . '/Enrolment/storage/cache');
+define('MUNEE_CACHE',   CACHE_DIR . '/Enrolment/assets');
+define('CONFIG_DIR',    dirname(__DIR__) . '/Enrolment/config');
+define('ROUTES_DIR',    dirname(__DIR__) . '/Enrolment/routes');
+define('VIEWS_DIR',     realpath(dirname(__DIR__) . '/Enrolment/templates'));
+define('IMPORT_DIR',    dirname(__DIR__) . '/Enrolment/storage/import');
+define('IMAGE_DIR',     '/Enrolment/storage/import');
+define('VENDOR_DIR',    dirname(__DIR__) . '/Enrolment/vendor');
 
 
 require 'vendor/autoload.php';
@@ -112,6 +112,8 @@ require ROUTES_DIR . '/users/import.php';
 require ROUTES_DIR . '/users/dpf.php';
 require ROUTES_DIR . '/users/caf.php';
 require ROUTES_DIR . '/users/settings.php';
+require ROUTES_DIR . '/payments/payment.php';
+require ROUTES_DIR . '/assessments/assessment.php';
 require ROUTES_DIR . '/assets.php';
 
 // renders default page
